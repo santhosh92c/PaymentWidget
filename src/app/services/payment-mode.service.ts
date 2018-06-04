@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 @Injectable()
 export class PaymentModeService {
 
-  private url = 'https://api.paymentwall.com/api/payment-systems/?key=f692a43d2d98b43b0cda44b02e345bda&country_code=RU';
+  private url = '';
   
   constructor(private http: HttpClient) { }
 
