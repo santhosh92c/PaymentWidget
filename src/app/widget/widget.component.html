@@ -1,0 +1,70 @@
+<div class="row">
+  <div class="col-3">
+    <div class="list-group">
+      <button 
+        type="button" 
+        *ngFor="let p of paymentModes$ | async" 
+        class="list-group-item list-group-item-action"
+        (click)="modeSelected(p)">
+        <img src="{{p.img_url}}" class="rounded mx-auto d-block">
+      </button>
+    </div>
+  </div>
+  <div *ngIf="paymentMode.name" class="col">
+    <div class="card">
+      <div class="card-header">
+        Checkout with {{paymentMode.name}}
+      </div>
+      <div class="card-body">
+        <img src="{{paymentMode.img_url}}" alt="..." class="rounded mx-auto d-block">
+        <h5 class="card-title">Amount: </h5>
+
+        <form [formGroup]="form" (ngSubmit)="pay()">
+          <div class="form-group">
+            <label for="name">Name on Card</label>
+            <input formControlName="nameOnCard" class="form-control" id="name" type="text">
+            <div *ngIf="nameOnCard.touched && nameOnCard.invalid" class="alert alert-danger">
+              <div *ngIf="nameOnCard.errors.required">Name field is mandatory</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="card-number">Card Number</label>
+            <input 
+              formControlName="cardNumber" class="form-control"
+              id="card-number" type="text" appNumberOnly>
+            <div *ngIf="cardNumber.touched && cardNumber.invalid" class="alert alert-danger">
+              <div *ngIf="cardNumber.errors.required">
+                  Card number is required.
+              </div>
+              <div *ngIf="cardNumber.errors.invalidCardNumber">
+                  Card number is invalid.
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="expiry-date">Expiration Date</label>
+            <input formControlName="expiryDate" class="form-control" id="expiry-date" type="month">
+            <div *ngIf="expiryDate.touched && expiryDate.invalid" class="alert alert-danger">
+              <div *ngIf="expiryDate.errors.required">Date needed</div>
+              <div *ngIf="expiryDate.errors.invalidDate">Past dates are not allowed</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="cvv">CVV</label>
+            <input formControlName="cvv" class="form-control" id="cvv" type="text" appNumberOnly>
+            <div *ngIf="cvv.touched && cvv.invalid" class="alert alert-danger">
+              <div *ngIf="cvv.errors.required">CVV is required</div>
+              <div *ngIf="cvv.errors.invalidCvv">CVV is invalid</div>
+              <div *ngIf="cvv.errors.minLength || cvv.errors.maxLength">CVV should always have 3 digits</div>
+            </div>
+          </div>
+
+          <button [disabled]="form.invalid" class="btn btn-success mx-auto d-block">Pay</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
